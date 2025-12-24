@@ -131,6 +131,10 @@ function updateScreen(button){
         else if (!currentScreen) return
         if (operator) b = currentScreen
         if (a && b && operator) {
+            if(operators.includes(b)){
+                b = ""
+                return
+            }
             bottomDisplay.textContent = ""
             bottomDisplay.textContent = operate(operator, a, b)
             a = ""
