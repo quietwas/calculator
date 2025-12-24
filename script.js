@@ -28,7 +28,8 @@ function operate(operator, a, b){
 }
 
 // Display number on button press
-const display = document.querySelector(".screen")
+const topDisplay = document.querySelector(".top")
+const bottomDisplay = document.querySelector(".bottom")
 
 let a = ""
 let b = ""
@@ -42,42 +43,79 @@ function updateScreen(button){
     const DELETE = "DELETE"
     const CLEAR = "CLEAR"
 
-    const currentScreen = display.textContent
+    const currentScreen = bottomDisplay.textContent
     const btnText = button.textContent
 
     if(operators.includes(btnText)){
         if (!currentScreen) return;
-        if (!a) a = currentScreen
-        else if (!b) b = currentScreen
-        if (a && b && operator) {
-            console.log(`${a} ${operator} ${b}`)
+
+        if (a === "") { 
+            a = currentScreen
+            if (a == "You really thought that would work?") a = ""
+            operator = btnText
+            
+            topDisplay.textContent = `${a} ${operator}`
+            
+            bottomDisplay.textContent = operator
+            return
         }
-        operator = btnText
-        display.textContent = ""
+
+        if (operators.includes(currentScreen)) {
+            operator = btnText
+            bottomDisplay.textContent = operator
+            
+            topDisplay.textContent = `${a} ${operator}`
+            return
+        }
+
+        if (operator) {
+            b = currentScreen
+            a = operate(operator, a, b)
+
+            if (a == "You really thought that would work?") {
+                bottomDisplay.textContent = a
+                a = ""
+                operated = true
+                topDisplay.textContent = ""
+                return
+            }
+
+            topDisplay.textContent = `${a} ${btnText}`
+
+            operated = true
+            operator = btnText
+            b = ""
+            bottomDisplay.textContent = operator
+        }
     }
 
     if(operators.includes(currentScreen)){
-        display.textContent = ""
+        bottomDisplay.textContent = ""
     }
 
     if(equalSign.includes(btnText)){
-        if (!currentScreen) return;
+        if (!currentScreen && operated){
+            bottomDisplay.textContent = a
+            topDisplay.textContent = ""
+        }
+        else if (!currentScreen) return
         if (operator) b = currentScreen
         if (a && b && operator) {
-            display.textContent = ""
-            display.textContent = operate(operator, a, b)
+            bottomDisplay.textContent = ""
+            bottomDisplay.textContent = operate(operator, a, b)
             a = ""
             b = ""
             operator = ""
             operated = true
         }
+        if (topDisplay) topDisplay.textContent = ""
     }
 
     if(!equalSign.includes(btnText) && !operators.includes(btnText) && operated){
         operated = false
-        display.textContent = btnText
+        bottomDisplay.textContent = btnText
     }
-    else if (!equalSign.includes(btnText)) display.textContent += btnText
+    else if (!equalSign.includes(btnText) && !operators.includes(btnText)) bottomDisplay.textContent += btnText
 }
 
 const buttons = document.querySelectorAll("button")
