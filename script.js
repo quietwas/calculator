@@ -39,12 +39,40 @@ let operated = false
 function updateScreen(button){
     const operators = ['\u00D7', '\u002B', '\u2212', '\u00f7']
     const equalSign = "="
-    const decimal = "."
+    const decimal = "\u002E"
     const DELETE = "DELETE"
     const CLEAR = "CLEAR"
 
     const currentScreen = bottomDisplay.textContent
     const btnText = button.textContent
+
+    if(CLEAR.includes(btnText)){
+        a = ""
+        b = ""
+        operator = ""
+        operated = false
+        topDisplay.textContent = ""
+        bottomDisplay.textContent = ""
+        return
+    }
+
+    if(DELETE.includes(btnText)) {
+        if(!currentScreen || currentScreen == "You really thought that would work?") return
+        if(operators.includes(currentScreen)){
+            operator = ""
+            bottomDisplay.textContent = a
+            a = ""
+            topDisplay.textContent = ""
+            operated = false
+            return
+        }
+        bottomDisplay.textContent = currentScreen.slice(0, -1)
+        return
+    }
+
+    if(btnText.includes(decimal)){
+        if(currentScreen.includes(decimal)) return
+    }
 
     if(operators.includes(btnText)){
         if (!currentScreen) return
