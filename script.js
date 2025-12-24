@@ -47,7 +47,9 @@ function updateScreen(button){
     const btnText = button.textContent
 
     if(operators.includes(btnText)){
-        if (!currentScreen) return;
+        if (!currentScreen) return
+
+        if (currentScreen == "You really thought that would work?") return
 
         if (a === "") { 
             a = currentScreen
